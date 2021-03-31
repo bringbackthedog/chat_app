@@ -7,39 +7,75 @@ import 'package:flutter_chat_app/core/models/message.dart';
 import 'package:flutter_chat_app/core/models/messages_received.dart';
 import 'package:flutter_chat_app/core/models/messages_sent.dart';
 
+// TODO:  Create references to 'users' and 'messages' Collections (tables)
+
+// TODO: `createUserInDb` method using `doc.set(model.toMap)`, where the document name
+// is the `uid` (unique identifier) of the user
+
+// TODO: create `getUserFromDb` method using `doc.get` and return the `model.fromMap`,
+// where `doc.data()` is the map
+
+// TODO: create `_snapshotToMessageList` private helper function.
+// This method maps every element of a stream into a `ChatMessage`
+//  - Takes a `QuerySnapshot` (result from db when using .snaphot()).
+//  - Returns an empty list if snapshot has no documents (i.e. no messages)
+//  - Creates a list of `ChatMessage`
+//  - For every doc in the QuerySnapshot docs we add the doc to the list, decoded
+//    into a `ChatMessage` using `ChatMessage.toMap`
+//  - Return the list of `ChatMessage`
+
+// TODO: create `getMessagesSentToUser` method
+// `getMessagesSentToUser` query
+//    - looks for docs in the db where the field `recipientUID` matches
+//    the uid of the `ChatUser` passed,
+//    - orders the docs them by `timeStamp` field
+//    - Maps to a List<ChatMessage> using `_snapshotToMessageList` helper
+//    - And finally instantiates and return `MessagesReceived` by mapping the resulting
+//      stream
+//
+// TODO: create `getMessagesSentByUser` method.
+// Same as `getMessagesSentToUser` but matches field `senderUID` (instead of recipientUID) to
+// the `ChatUser` uid
+
+//  TODO: create `getUserList` method
+//  - returns the users collection as a stream (using collection.snapshot)
+//  - maps the resulting stream to a `ChatUser` list using
+//    helper function `_convertSnapshotToChatUserList`
+//  TODO: create helper  `_convertSnapshotToChatUserList` within the scope of `getUserList`
+//  -  Takes a `QuerySnapshot` (result of stream query)
+//  - If the `QuerySnapshot` has no documents (i.e. no users), returns an empty list
+//  - Creates a list of `ChatUser`
+//  - For every doc in snapshot add `ChatUser` to list using `ChatUser.toMap`
+//  - return list
+
+//  TODO: create `onSendMessage` method
+//  - adds a ChatMessage to `messages` collection using `ChatMessage.toMap`
+
+//  TODO: create `deleteToken` method to delete the device token from db on sign out
+//  - sets the `fcmToken` field to null for the doc name of `uid` passed
+//  - uses `SetOptions(merge: true)` as a second argument to set as to not override the
+//    whole document but only that one field
+//
+//  TODO: create `addToken` method to add the device token to db on sign in
+//  - sets the `fcmToken` field to the `fcmToken` string passed,
+//   for the doc name of `uid` passed as argument.
+//  - uses `SetOptions(merge: true)` as a second argument to set as to not override the
+//    whole document but only that one field
+
 class Database {
-  final CollectionReference _usersCollectionRef =
-      FirebaseFirestore.instance.collection("users");
-
-  final CollectionReference _messagesCollectionRef =
-      FirebaseFirestore.instance.collection("messages");
-
   ///
   /// Helper Function
   ///
   List<ChatMessage> _snapshotToMessageList(QuerySnapshot msgListSnapshot) {
     // No message case
-    if (msgListSnapshot.docs.isEmpty) return [];
 
     /// Initialize an empty list of [ChatMessage]s
-    List<ChatMessage> msgList = [];
 
     /// Add the messages from Firestore to the list.
-    for (QueryDocumentSnapshot msgDoc in msgListSnapshot.docs) {
-      Map<String, dynamic> msgData = msgDoc.data();
-
-      ChatMessage msg = ChatMessage.fromMap(msgData);
-      msgList.add(msg);
-    }
-
-    return msgList;
   }
 
   /// Create [ChatUser] in users collections
-  Future createUserInDb({@required ChatUser chatUser}) async {
-    await _usersCollectionRef.doc(chatUser.uid).set(chatUser.toMap());
-    log("User ${chatUser.userName} created in database.");
-  }
+  Future createUserInDb({@required ChatUser chatUser}) async {}
 
   ///
   Future<ChatUser> getUserFromDb({
@@ -47,78 +83,30 @@ class Database {
   }) async {
     /// Wait for firebase as data is created
     await Future.delayed(Duration(milliseconds: 1500));
-    DocumentSnapshot userSnapshot = await _usersCollectionRef.doc(uid).get();
-    Map<String, dynamic> _userData = userSnapshot.data();
-
-    return ChatUser.fromMap(_userData);
-  }
-
-  /// Get data of all other users available to send message to.
-  Stream<List<ChatUser>> getUserList() {
-    List<ChatUser> _convertSnapshotToChatUserList(
-        QuerySnapshot _userCollectionSnapshot) {
-      List<QueryDocumentSnapshot> _userDocList = _userCollectionSnapshot.docs;
-
-      /// Check that we're actually getting some users.
-      if (_userDocList.isEmpty) return [];
-
-      List<ChatUser> chatUserList = [];
-      for (QueryDocumentSnapshot _userDoc in _userDocList) {
-        Map<String, dynamic> _userData = _userDoc.data();
-        ChatUser _chatUser = ChatUser.fromMap(_userData);
-        chatUserList.add(_chatUser);
-      }
-      return chatUserList;
-    }
-
-    return _usersCollectionRef.snapshots().map(_convertSnapshotToChatUserList);
-  }
-
-  ///
-  Future<void> onSendMessage({ChatMessage chatMessage}) async {
-    await _messagesCollectionRef.add(chatMessage.toMap());
-    log("sent message: ${chatMessage.message}");
   }
 
   /// Gets a list of [ChatMessage]s received by this user.
   ///
   /// Returns an empty list if there are none.
   Stream<MessagesReceived> getMessagesSentToUser(
-      {@required ChatUser chatUser}) {
-    if (chatUser == null) return null;
-    return _messagesCollectionRef
-        .where("recipientUID", isEqualTo: chatUser.uid)
-        .orderBy("timestamp" /* descending: false */)
-        .snapshots()
-        .map(_snapshotToMessageList)
-        .map((msgList) => MessagesReceived(list: msgList));
-  }
+      {@required ChatUser chatUser}) {}
 
   /// Gets a list of [ChatMessage]s sent by this user.
   ///
   /// Returns an empty list if there are none.
-  Stream<MessagesSent> getMessagesSentByUser({@required ChatUser chatUser}) {
-    if (chatUser == null) return null;
-    return _messagesCollectionRef
-        .where("senderUID", isEqualTo: chatUser.uid)
-        .orderBy("timestamp" /* descending: false */)
-        .snapshots()
-        .map(_snapshotToMessageList)
-        .map((msgList) => MessagesSent(list: msgList));
+  Stream<MessagesSent> getMessagesSentByUser({@required ChatUser chatUser}) {}
+
+  /// Get data of all other users available to send message to.
+  Stream<List<ChatUser>> getUserList() {
+    List<ChatUser> _convertSnapshotToChatUserList(
+        QuerySnapshot _userCollectionSnapshot) {}
   }
+
+  ///
+  Future<void> onSendMessage({ChatMessage chatMessage}) async {}
 
   /// Delete the FCM Token from currently logged in user
-  Future<void> deleteToken(String uid) async {
-    await _usersCollectionRef.doc(uid).set(
-      {"fcmToken": null},
-      SetOptions(merge: true),
-    );
-  }
+  Future<void> deleteToken(String uid) async {}
 
-  Future<void> addToken(String uid, String fcmToken) async {
-    await _usersCollectionRef.doc(uid).set(
-      {"fcmToken": fcmToken},
-      SetOptions(merge: true),
-    );
-  }
+  Future<void> addToken(String uid, String fcmToken) async {}
 }
