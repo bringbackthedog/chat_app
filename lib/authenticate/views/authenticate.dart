@@ -3,6 +3,19 @@ import 'package:flutter_chat_app/authenticate/view_models/auth_view_model.dart';
 import 'package:flutter_chat_app/authenticate/views/login.dart';
 import 'package:flutter_chat_app/authenticate/views/register.dart';
 
+// TODO: Create Stateful widget `Authenticate`
+// TODO: Declare an unitialized authViewModel parameter in the state (outside build)
+// TODO: Create a bool `showingLoginView` initialized to `true`
+// TODO: Create a `toggleLoginRegister`  method that rebuilds this view based of the value of `showingLoginView`
+
+// TODO:  Within build Create AuthViewModel and pass `toggleLoginRegister` to its constructor
+// TODO:  Return LoginView/RegisterView views based on `showingLoginView` (assigning the viewmodel to their constructor)
+//
+//
+//
+//
+//
+
 /// Redirects the user to [LoginView] or [RegisterView].
 ///
 /// Notice it is a [StatefulWidget].
@@ -18,27 +31,3 @@ import 'package:flutter_chat_app/authenticate/views/register.dart';
 ///
 /// i.e.: When [LoginView] calls `toggleLoginRegister`, it triggers `setState` of
 /// it's parent, [Authenticate].
-class Authenticate extends StatefulWidget {
-  @override
-  _AuthenticateState createState() => _AuthenticateState();
-}
-
-class _AuthenticateState extends State<Authenticate> {
-  AuthViewModel authViewModel;
-
-  /// Toggles between [LoginView] and [RegisterView].
-  bool showingLoginView = true;
-  void toggleLoginRegister() =>
-      setState(() => showingLoginView = !showingLoginView);
-
-  @override
-  Widget build(BuildContext context) {
-    authViewModel = AuthViewModel(toggleLoginRegister: toggleLoginRegister);
-
-    if (showingLoginView) {
-      return LoginView(authViewModel: authViewModel);
-    } else {
-      return RegisterView(authViewModel: authViewModel);
-    }
-  }
-}

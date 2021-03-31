@@ -8,6 +8,9 @@ import 'package:flutter_chat_app/core/chat_app_theme.dart';
 import 'package:flutter_chat_app/authenticate/views/auth_wrapper.dart';
 import 'package:provider/provider.dart';
 
+// TODO: USER PROVIDER: Wrap materialapp in a StreamProvider to listen to the current
+// logged in status
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -49,17 +52,10 @@ class ChatApp extends StatelessWidget {
     /// in the app.
     ///
     ///
-    return StreamProvider<User>.value(
 
-        /// `FirebaseAuth.instance.authStateChanges()` returns a
-        /// [User] object if a user is logged in firebase.
-        /// Will return `null` otherwise.
-        value: AuthService.authStatus,
-        builder: (context, snapshot) {
-          return MaterialApp(
-            theme: chatAppTheme,
-            home: AuthWrapper(),
-          );
-        });
+    return MaterialApp(
+      theme: chatAppTheme,
+      home: AuthWrapper(),
+    );
   }
 }

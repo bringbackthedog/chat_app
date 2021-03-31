@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/authenticate/services/auth_service.dart';
+// TODO: Create `AuthViewModel` class with
+//    -  a member of AuthService called _auth
+//    - a member `toggleLoginRegister` of type function (required in constructor)
+// TODO: create
+// TODO: Create `emailController`, `passwordController`, and `userNameController` as `TextEdititingControllers`
+// to track value of textfields
+// TODO: create `signInWithEmail` method : call AuthService method
+// TODO: create `signUpWithEmail` method : call AuthService method
 
 class AuthViewModel {
-  AuthViewModel({@required this.toggleLoginRegister});
-  final Function toggleLoginRegister;
-
-  final AuthService _auth = AuthService();
-
-  /// Text Editing Controllers allow us to read/set the value of a text field.
-  final emailController = TextEditingController(text: "");
-  final passwordController = TextEditingController(text: "");
-  final userNameController = TextEditingController(text: "");
-
   final String loginViewTitle = "Sign In";
   final String loginViewSubtitle = "Chat with Flutter and Firebase";
 
@@ -26,19 +24,4 @@ class AuthViewModel {
   final String registerButtonText = "REGISTER";
   final String createAccountButtonText = "Create my account";
   final String loginButtonText = "LOGIN";
-
-  Future<void> signInWithEmail() async {
-    await _auth.onSignInWithEmail(
-      emailController.text,
-      passwordController.text,
-    );
-  }
-
-  Future<void> signUpWithEmail() async {
-    await _auth.onSignUpWithEmail(
-      userName: userNameController.text,
-      email: emailController.text,
-      password: passwordController.text,
-    );
-  }
 }
