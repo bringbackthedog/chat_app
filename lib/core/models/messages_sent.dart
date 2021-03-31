@@ -1,5 +1,7 @@
 import 'package:flutter_chat_app/core/models/message.dart';
 
+// TODO: Create `MessagesSent` model with field `list` of type  List<ChatMessage>
+
 /// `MessagesReceived` and `MessagesSent` objects are only a `List<ChatMessage>`.
 ///
 /// We use them because `Provider` tracks types signature. If we try to track
@@ -21,7 +23,3 @@ import 'package:flutter_chat_app/core/models/message.dart';
 ///
 
 /// List of all messages sent by this user.
-class MessagesSent {
-  MessagesSent({this.list});
-  List<ChatMessage> list;
-}

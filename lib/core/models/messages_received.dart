@@ -1,4 +1,4 @@
-import 'package:flutter_chat_app/core/models/message.dart';
+// TODO: Create `MessagesReceived` model with field `list` of type  List<ChatMessage>
 
 /// `MessagesReceived` and `MessagesSent` objects are only a `List<ChatMessage>`.
 ///
@@ -11,7 +11,3 @@ import 'package:flutter_chat_app/core/models/message.dart';
 /// will behave as expected.
 
 /// List of all messages sent to this user.
-class MessagesReceived {
-  MessagesReceived({this.list});
-  List<ChatMessage> list;
-}
