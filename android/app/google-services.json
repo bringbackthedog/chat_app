@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "777516205924",
+    "project_id": "flutter-crash-course-2021",
+    "storage_bucket": "flutter-crash-course-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777516205924:android:7420bbfdf1bed8b4bb9c71",
+        "android_client_info": {
+          "package_name": "com.demo.flutter_crash_course"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777516205924-ubnmtsdd7ndgehdgqsskjihpq9r1fl8c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9kVPQyvO-h49FZfJJvjiTz7lqA2KbAtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777516205924-ubnmtsdd7ndgehdgqsskjihpq9r1fl8c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777516205924:android:988eef3cef9e2df5bb9c71",
+        "android_client_info": {
+          "package_name": "com.flutter.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777516205924-ubnmtsdd7ndgehdgqsskjihpq9r1fl8c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9kVPQyvO-h49FZfJJvjiTz7lqA2KbAtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777516205924-ubnmtsdd7ndgehdgqsskjihpq9r1fl8c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
