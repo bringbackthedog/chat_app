@@ -7,6 +7,38 @@ import 'package:flutter_chat_app/core/models/messages_received.dart';
 import 'package:flutter_chat_app/core/models/messages_sent.dart';
 import 'package:flutter_chat_app/core/services/database.dart';
 
+// TODO: create sendMsgTo method:
+//    - validate messageFormKey. Store result in bool `_msgHasContent`
+//    - check if recipient == null. Store result in bool `emptyRecipient`
+//    - If !msgHasContent or emptyRecipient, return;
+//
+//    - Otherwise, call Database.onSendMessage
+//    - Clear the `messageController` (i.e. set to empty string)
+//
+// TODO: create getMessagesSentTo method:
+// - return null if : recipientUsername == null || messagesSent == null
+// - return this.messageSent list where  message.recipientUsername == recipientUsername
+//
+//// TODO: create getMessagesReceivedFrom method:
+// - return null if enderUsername == null || messagesReceived == null
+// - return this.messageSent list where  message.senderUsername == senderUsername;
+//
+// TODO: create getMessagesBetweenUserAnd method:
+// - if interlocutor is null OR  (messagesReceived & messagesSent) are null, return null
+// - Create var messagesFromInterlocutor: call `getMessagesReceivedFrom` w interloctur.userName
+// - Create var messagesToInterlocutor: call `getMessagesSentTo` w interloctur.userName
+// - Combine the 2 list (+) into a var `messageList`
+// - sort `messageList`: compare msg1 timestamp to msg2
+// - return `messageList`
+
+//// TODO: create getMessagesReceivedFrom method:
+// -   ChatMessage lastMessageFromSender =getMessagesReceivedFrom(senderUsername).last;
+// - format it using String lastMessageTime = dateFormat.format(lastMessageFromSender.timestamp.toDate());
+// - return it: return lastMessageTime
+
+// TODO: create getMessagesReceivedFrom method:
+// - chatUsers?.singleWhere((ChatUser chatUser) => chatUser.userName == interlocutorUsername));
+
 class MessageViewModel {
   MessageViewModel({
     @required this.chatUser,
@@ -25,10 +57,7 @@ class MessageViewModel {
   Set<String> interlocutorUsernames = {};
 
   /// Get interlocutor with username
-  ChatUser getInterlocutorWithUsername(String interlocutorUsername) {
-    return chatUsers?.singleWhere(
-        (ChatUser chatUser) => chatUser.userName == interlocutorUsername);
-  }
+  ChatUser getInterlocutorWithUsername(String interlocutorUsername) {}
 
   /// The currently logged in user.
   ChatUser chatUser;
@@ -49,80 +78,20 @@ class MessageViewModel {
   GlobalKey<FormFieldState> messageFormKey = GlobalKey<FormFieldState>();
 
   /// Sending a message
-  Future<void> sendMsgTo(ChatUser recipient) async {
-    // Database _database = Database();
-    bool _msgHasContent = messageFormKey.currentState.validate();
-    bool emptyRecipient = recipient == null;
-
-    /// No content or no recipient, don't send.
-    if (!_msgHasContent || emptyRecipient) {
-      return;
-    }
-
-    /// Send message
-    await Database().onSendMessage(
-      chatMessage: ChatMessage(
-        message: messageController.text,
-        senderUsername: chatUser.userName,
-        senderUID: chatUser.uid,
-        recipientUID: recipient.uid,
-        recipientUsername: recipient.userName,
-      ),
-    );
-
-    /// Clear the textfield
-    messageController.text = '';
-
-    return;
-  }
+  Future<void> sendMsgTo(ChatUser recipient) async {}
 
   /// Get messages from a particular sender.
-  List<ChatMessage> getMessagesReceivedFrom(String senderUsername) {
-    if (senderUsername == null || messagesReceived == null) return null;
-
-    return messagesReceived.list.where((message) {
-      return message.senderUsername == senderUsername;
-    }).toList();
-  }
+  List<ChatMessage> getMessagesReceivedFrom(String senderUsername) {}
 
   /// Get messages to a particular sender.
-  List<ChatMessage> getMessagesSentTo(String recipientUsername) {
-    if (recipientUsername == null || messagesSent == null) return null;
-
-    return messagesSent.list.where((message) {
-      return message.recipientUsername == recipientUsername;
-    }).toList();
-  }
+  List<ChatMessage> getMessagesSentTo(String recipientUsername) {}
 
   /// Get all messages between the user and the interlocutor. Sorted by time
   /// stamp.
   ///
   /// Returns empty list if `interlocutor == null` or if there are no messages.
-  List<ChatMessage> getMessagesBetweenUserAnd(ChatUser interlocutor) {
-    if (interlocutor == null) return [];
-    if (messagesSent == null && messagesReceived == null) return [];
-
-    List<ChatMessage> messagesFromInterlocutor =
-        getMessagesReceivedFrom(interlocutor.userName);
-    List<ChatMessage> messagesToInterlocutor =
-        getMessagesSentTo(interlocutor.userName);
-
-    List<ChatMessage> messageList =
-        messagesFromInterlocutor + messagesToInterlocutor;
-
-    /// Sort messages by time stamp
-    messageList.sort((msg1, msg2) => msg1.timestamp.compareTo(msg2.timestamp));
-    return messageList;
-  }
+  List<ChatMessage> getMessagesBetweenUserAnd(ChatUser interlocutor) {}
 
   /// Get the [TimeStamp] as a [String] of the last message from a particular sender.
-  String getTimeOfLastMessageFrom(String senderUsername) {
-    ChatMessage lastMessageFromSender =
-        getMessagesReceivedFrom(senderUsername).last;
-
-    String lastMessageTime =
-        dateFormat.format(lastMessageFromSender.timestamp.toDate());
-
-    return lastMessageTime;
-  }
+  String getTimeOfLastMessageFrom(String senderUsername) {}
 }
