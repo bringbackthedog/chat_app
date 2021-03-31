@@ -6,62 +6,35 @@ import 'package:flutter_chat_app/Messaging/services/notifications.dart';
 import 'package:flutter_chat_app/core/models/chat_user.dart';
 import 'package:flutter_chat_app/core/services/database.dart';
 
+// TODO: create AuthService class with private fields `_db`, a `Database` instance and
+// `_auth` a reference to FirebaseAuth
+
+// TODO: create static getter `authStatus` which returns a stream of
+// type `User` (a Firebase User). This stream is updated on changes to the auth state.
+
+// TODO: Create `onSignUpWithEmail` method
+//  - create a new user in FirebaseAuth using `.createUserWithEmailAndPassword`.
+//    Strore the resulting `UserCredential` object in a var `userCredential`.
+//  - create a `ChatUser` with the `userName` and `email` passed as arguments,
+//    and the `uid` from the `userCredential` object
+//  - await creation of this `ChatUser` in the db using `Database.createUserInDb`
+
+// TODO: Create `onSignInWithEmail` method
+//  - Sign user in using Firebase auth's .signInWithEmailAndPassword
+//  - add Token to db using Database.addToken
+
+// TODO: Create `onLogout` method
+// - delete FCM token
+// - log user out using FirebaseAuth.signOut
+
 class AuthService {
-  Database _db = Database();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  static Stream<User> get authStatus =>
-      FirebaseAuth.instance.authStateChanges();
-
   Future<void> onSignUpWithEmail({
     @required String userName,
     @required String email,
     @required String password,
-  }) async {
-    UserCredential userCredential;
+  }) async {}
 
-    try {
-      userCredential = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      log("Successfully created new account");
-    } catch (e) {
-      log("Failed to create account: ${e.toString()}");
-      return null;
-    }
+  Future<void> onSignInWithEmail(String email, String password) async {}
 
-    /// Create a [ChatUser] to write to Firestore
-    ChatUser chatUser = ChatUser(
-      userName: userName,
-      email: email,
-      uid: userCredential.user.uid,
-      fcmToken: await NotificationService.token,
-    );
-
-    /// Write to Firestore
-    await _db.createUserInDb(chatUser: chatUser);
-  }
-
-  Future<void> onSignInWithEmail(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // Add the device's FCM Token for sending notifications to it.
-      await _db.addToken(
-          _auth.currentUser.uid, await NotificationService.token);
-      log("Logged in successfully");
-    } catch (e) {
-      log("Failed to login: ${e.toString()}");
-      return null;
-    }
-  }
-
-  Future<void> onLogout() async {
-    // Delete FCM Token when user logs out to stop notifications from
-    // being sent to the current device.
-    await _db.deleteToken(_auth.currentUser.uid);
-    await _auth.signOut();
-    log("Logged out successfully");
-  }
+  Future<void> onLogout() async {}
 }
