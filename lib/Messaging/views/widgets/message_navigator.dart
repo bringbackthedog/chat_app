@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MessageNavigator extends StatelessWidget {
-  MessageNavigator({this.builder});
-  final Widget Function(BuildContext) builder;
+// TODO: Create statelss widget `MessageNavigator` with a member `builder` of type
+//  `Widget Function(BuildContext)`  passed in constructor
 
-  @override
-  Widget build(BuildContext context) {
-    return Navigator(
-      onGenerateRoute: (_) {
-        return MaterialPageRoute(
-          builder: builder,
-        );
-      },
-    );
-  }
-}
+// TODO: Return Navigator
+//  - onGenerateRoute returns a `MaterialPageRoute` that takes the `builder`

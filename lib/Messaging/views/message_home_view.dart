@@ -4,19 +4,11 @@ import 'package:flutter_chat_app/Messaging/views/widgets/message_home_view_body.
 import 'package:flutter_chat_app/Messaging/views/widgets/no_messages_home_view_body.dart';
 import 'package:provider/provider.dart';
 
+// TODO: Create StatelessWidget `MessageHomeView`
+// TODO: Using provider, get an instance of `MessageViewModel`. Store it in a var.
+// ! We DON'T want to rebuild on changes to this object, since the parent providers already do this.
+// TODO: If messagesReceived.list.isEmpty return `NoMessagesHomeViewBody` widget,
+// passing the `messageViewModel` in the constructor
+// TODO: Otherwise, return `MessageHomeViewBody` widget,passing the `messageViewModel` in the constructor.
+
 /// A list view of all messages send to this user
-class MessageHomeView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    MessageViewModel messageViewModel =
-        Provider.of<MessageViewModel>(context, listen: false);
-
-    /// No messages for this [Chatuser] case.
-    if (messageViewModel.messagesReceived == null ||
-        messageViewModel.messagesReceived.list.isEmpty)
-      return NoMessagesHomeViewBody(messageViewModel: messageViewModel);
-
-    /// Found messages for this [Chatuser].
-    return MessageHomeViewBody(messageViewModel: messageViewModel);
-  }
-}
