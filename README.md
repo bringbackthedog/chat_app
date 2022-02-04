@@ -14,6 +14,6 @@ https://user-images.githubusercontent.com/34327253/151759362-df493f6f-a5ad-417d-
 ## Getting Started 
 Login or create an account. Pick a sender. Send messages. 
 
-### Run on web
+### To run on web
 - `flutter run -d chrome`
 - To see logs: Look for `dart.developer.log` in console (must set 'levels' to 'verbose')
